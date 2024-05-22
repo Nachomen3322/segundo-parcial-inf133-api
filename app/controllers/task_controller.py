@@ -3,7 +3,7 @@ from models.task_model import Task
 from views.task_view import render_task_list, render_task_detail
 from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
 from functools import wraps
-from utils.decorators import jwt_required, roles_required
+from utils.decorators import jwt_required, role_required
 
 task_bp = Blueprint("task", __name__)
 
@@ -23,7 +23,7 @@ def get_task(id):
 
 @task_bp.route("/tasks", methods=["POST"])
 @jwt_required
-@roles_required(role=["admin"])
+@role_required(role=["admin"])
 def create_task():
     data = request.json
     print(data)
@@ -40,7 +40,7 @@ def create_task():
     
 @task_bp.route("/tasks/<int:id>", methods=["PUT"])
 @jwt_required
-@roles_required(role=["Admin"])
+@role_required(role=["Admin"])
 def update_task(id):
     task = Task.get_by_id(id)
     if not task:
@@ -57,7 +57,7 @@ def update_task(id):
 
 @task_bp.route("/tasks/<int:id>", methods=["DELETE"])
 @jwt_required
-@roles_required(role=["admin"])
+@role_required(role=["admin"])
 def delete_task(id):
     task = Task.get_by_id(id)
     
